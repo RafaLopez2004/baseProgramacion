@@ -1,6 +1,6 @@
 package proyecto_final;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Alumno {
 	private int numMatricula;
@@ -8,10 +8,10 @@ public class Alumno {
 	private String apellido1;
 	private String apellido2;
 	private Curso curso;
-	private LocalDate fechaNacimiento;
+	private Date fechaNacimiento;
 	
 	public Alumno(int numMatricula, String nombre, String apellido1, String apellido2, Curso curso,
-			LocalDate fechaNacimiento) {
+			Date fechaNacimiento) {
 		super();
 		this.numMatricula = numMatricula;
 		this.nombre = nombre;
@@ -21,6 +21,14 @@ public class Alumno {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
+	public Alumno(int numMatricula, String nombre, String apellido1, String apellido2, Date date) {
+		super();
+		this.numMatricula = numMatricula;
+		this.nombre = nombre;
+		this.apellido1 = apellido1;
+		this.apellido2 = apellido2;
+		this.fechaNacimiento = date;
+	}
 	public int getNumMatricula() {
 		return numMatricula;
 	}
@@ -61,11 +69,11 @@ public class Alumno {
 		this.curso = curso;
 	}
 	
-	public LocalDate getFechaNacimiento() {
+	public Date getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 }

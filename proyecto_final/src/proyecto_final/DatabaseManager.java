@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -31,25 +32,26 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 	}
-	public ArrayList<Alumno> getBooks(){
-		ArrayList<Alumno> books = null;
+	public ArrayList<Alumno> getAlumnos(){
+		ArrayList<Alumno> alumnos = null;
 		try {
 			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT id,titulo,ano,autor,editorial FROM books");
+					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2, curso, fechaNacimiento FROM alumnos");
 			ResultSet rs = ps.executeQuery();
-			books = new ArrayList<Alumno>();
+			alumnos = new ArrayList<Alumno>();
 			while(rs.next()) {
-			/*	books.add(new Alumno(rs.getInt(1),
+				alumnos.add(new Alumno(rs.getInt(1),
 						rs.getString(2),
 						rs.getString(3),
 						rs.getString(4),
-						rs.getString(5)));*/
+						rs.getDate(6))); 
 			}
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
-		return books;
+		return alumnos;
 	}
+	/*
 	public ArrayList<Alumno> getBooks(String autor){
 		ArrayList<Alumno> books = null;
 		try {
@@ -58,14 +60,14 @@ public class DatabaseManager {
 							+ "ano,autor,editorial FROM books WHERE autor=?");
 			ps.setString(1,autor);
 			ResultSet rs = ps.executeQuery();
-			books = new ArrayList<Alumno>();/*
+			books = new ArrayList<Alumno>();
 			while(rs.next()) {
 				books.add(new Alumno(rs.getInt(1),
 						rs.getString(2),
 						rs.getString(3),
 						rs.getString(4),
 						rs.getString(5)));
-			}*/
+			}
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
@@ -99,11 +101,11 @@ public class DatabaseManager {
 			HashMap<String,Object> filter) {
 
 	}
-	/**
+	/
 	 * 
 	 * @param filter
 	 * @return
-	 */
+
 	public ArrayList<Book> getBooks(HashMap<String,Object> filter){
 		ArrayList<Book> books = null;
 		int i=0, type=Types.VARCHAR;
@@ -145,4 +147,7 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 		return books;
-	}
+	 */
+
+
+}
