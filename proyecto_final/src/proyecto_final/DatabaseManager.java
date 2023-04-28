@@ -32,6 +32,15 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Metodo sobrecargado que se encarga de extraer alumnos 
+	 * de la base de datos a partir de ningun parametro, el curso
+	 * o la letra del curso y el curso
+	 * @return alumnos Los alumnos obtenidos segun la consulta
+	 */
+	/* TODO Los alumnos poseen una propiedad curso, que es una clave foranea de otra tabla y 
+	 * una propiedad que es un objeto, averiguar en casa una forma de obtener el objeto completo 
+	 * traves de la consulta */
 	public ArrayList<Alumno> getAlumnos(){
 		ArrayList<Alumno> alumnos = null;
 		try {
@@ -51,103 +60,57 @@ public class DatabaseManager {
 		}
 		return alumnos;
 	}
-	/*
-	public ArrayList<Alumno> getBooks(String autor){
-		ArrayList<Alumno> books = null;
+	
+	public ArrayList<Alumno> getAlumnos(Curso curso){
+		ArrayList<Alumno> alumnos = null;
 		try {
 			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT id,titulo,"
-							+ "ano,autor,editorial FROM books WHERE autor=?");
-			ps.setString(1,autor);
+					prepareStatement("SELECT Alumno.numMatricula,Alumno.nombre,Alumno.apellido1, "
+							+ "Alumno.apellido2,Alumno.fechaNacimiento, Alumno.curso, Curso.año, Curso.letraAño  "
+							+ "FROM Alumno join Curso on Alumno.curso"
+							+ "WHERE Curso.año=?");
+			ps.setInt(1,curso.getAño());
 			ResultSet rs = ps.executeQuery();
-			books = new ArrayList<Alumno>();
-			while(rs.next()) {
-				books.add(new Alumno(rs.getInt(1),
+			alumnos = new ArrayList<Alumno>();
+			/*while(rs.next()) {
+			
+			}
+				alumnos.add(new Alumno(rs.getInt(1),
 						rs.getString(2),
 						rs.getString(3),
 						rs.getString(4),
 						rs.getString(5)));
-			}
+			}*/
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
-		return books;
+		return alumnos;
 	}
-	public ArrayList<Alumno> getBooks(String autor, String editorial){
-		ArrayList<Book> books = null;
+	public ArrayList<Alumno> getAlumnos(String autor, String editorial){
+		ArrayList<Alumno> alumnos = null;
 		try {
 			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT id,titulo,"
-							+ "ano,autor,editorial FROM books WHERE autor=?"
-							+ " AND editorial=?");
+					prepareStatement("SELECT SELECT numMatricula,nombre,apellido1, apellido2, curso, fechaNacimiento "
+							+ "FROM alumnos "
+							+ "WHERE año=? "
+							+ "AND letraAño=?");
 			ps.setString(1,autor);
 			ps.setString(2, editorial);
 			ResultSet rs = ps.executeQuery();
-			books = new ArrayList<Book>();
+			alumnos = new ArrayList<Alumno>();
+			/*
 			while(rs.next()) {
-				books.add(new Book(rs.getInt(1),
+				alumnos.add(new Alumno(rs.getInt(1),
 						rs.getString(2),
 						rs.getString(3),
 						rs.getString(4),
 						rs.getString(5)));
 			}
+			*/
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
-		return books;
+		return alumnos;
 	}
-
-	public void getData(String source, ArrayList<String> fields,
-			HashMap<String,Object> filter) {
-
-	}
-	/
-	 * 
-	 * @param filter
-	 * @return
-
-	public ArrayList<Book> getBooks(HashMap<String,Object> filter){
-		ArrayList<Book> books = null;
-		int i=0, type=Types.VARCHAR;
-		String whereData="";
-		try {
-			for(String key:filter.keySet()) {
-				whereData+=key+"=? AND ";
-			}
-			//" titulo=? AND editorial=? AND "
-			whereData = whereData.substring(0, whereData.length()-5);
-			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT id,titulo,"
-							+ "ano,autor,editorial FROM books WHERE " +
-							whereData);
-
-			for(Object value:filter.values()) {
-				if(value instanceof Integer) {
-					type = Types.INTEGER;
-				}else if(value instanceof Float) {
-					type = Types.FLOAT;
-				}else if(value instanceof Double) {
-					type = Types.DOUBLE;
-				}else if(value instanceof String) {
-					type = Types.VARCHAR;
-				}
-				ps.setObject(++i, value, type);				
-			}
-
-			ResultSet rs = ps.executeQuery();
-			books = new ArrayList<Book>();
-			while(rs.next()) {
-				books.add(new Book(rs.getInt(1),
-						rs.getString(2),
-						rs.getString(3),
-						rs.getString(4),
-						rs.getString(5)));
-			}
-		} catch (SQLException e) {			
-			e.printStackTrace();
-		}
-		return books;
-	 */
-
 
 }
