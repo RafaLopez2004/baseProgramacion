@@ -61,14 +61,13 @@ public class DatabaseManager {
 		return alumnos;
 	}
 	
-	public ArrayList<Alumno> getAlumnos(Curso curso){
+	public ArrayList<Alumno> getAlumnosAño(Curso curso){
 		ArrayList<Alumno> alumnos = null;
 		try {
 			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT Alumno.numMatricula,Alumno.nombre,Alumno.apellido1, "
-							+ "Alumno.apellido2,Alumno.fechaNacimiento, Alumno.curso, Curso.año, Curso.letraAño  "
-							+ "FROM Alumno join Curso on Alumno.curso"
-							+ "WHERE Curso.año=?");
+					prepareStatement("SELECT * "
+							+ "FROM vista1  "
+							+ "WHERE año=?");
 			ps.setInt(1,curso.getAño());
 			ResultSet rs = ps.executeQuery();
 			alumnos = new ArrayList<Alumno>();
@@ -86,27 +85,27 @@ public class DatabaseManager {
 		}
 		return alumnos;
 	}
-	public ArrayList<Alumno> getAlumnos(String autor, String editorial){
+	public ArrayList<Alumno> getAlumnosLetraAño(Curso curso){
 		ArrayList<Alumno> alumnos = null;
 		try {
 			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT SELECT numMatricula,nombre,apellido1, apellido2, curso, fechaNacimiento "
-							+ "FROM alumnos "
+					prepareStatement("SELECT * "
+							+ "FROM vista1  "
 							+ "WHERE año=? "
 							+ "AND letraAño=?");
-			ps.setString(1,autor);
-			ps.setString(2, editorial);
+			ps.setInt(1,curso.getAño());
+			ps.setString(2, curso.getLetraAño());
 			ResultSet rs = ps.executeQuery();
 			alumnos = new ArrayList<Alumno>();
-			/*
-			while(rs.next()) {
+			
+			while(rs.next()) {	
 				alumnos.add(new Alumno(rs.getInt(1),
 						rs.getString(2),
 						rs.getString(3),
 						rs.getString(4),
-						rs.getString(5)));
+						curso,
+						rs.getDate(6))); 
 			}
-			*/
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
