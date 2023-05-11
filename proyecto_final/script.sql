@@ -14,9 +14,7 @@ CREATE TABLE Alumno(
 CREATE TABLE Curso(
 	id int PRIMARY key,
     año int,
-    letraAño character,
-    alumnos int,
-    CONSTRAINT fk2 FOREIGN KEY (alumnos) REFERENCES Alumno(numMatricula)
+    letraAño character
 );
 
 -- ALTER TABLE Alumno 
