@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS instituto;
+DROP DATABASE instituto;
 CREATE DATABASE instituto;
 USE instituto;
 
@@ -17,18 +17,36 @@ CREATE TABLE Curso(
     letraAño character
 );
 
--- ALTER TABLE Alumno 
--- 	add CONSTRAINT fk FOREIGN KEY (idCurso) REFERENCES Curso(id);
+CREATE TABLE Profesor(
+	idProfesor int PRIMARY key,
+	nombre varchar(20),
+	apellido1 varchar(20),
+	apellido2 varchar(20),
+	fechaNacimiento DATE,
+	idCurso int
+);
+ALTER TABLE Alumno 
+add CONSTRAINT fk FOREIGN KEY (idCurso) REFERENCES Curso(id);
+
+ALTER TABLE Profesor 
+add CONSTRAINT fk2 FOREIGN KEY (idCurso) REFERENCES Curso(id);
+
+INSERT INTO Curso
+	VALUES (1,1,"A");
 
 INSERT INTO Alumno
 	VALUES (1,"Paco","Chocolatero","Franco",1,"2004-04-05");
 
-INSERT INTO Curso
-	VALUES (1,1,"A",1);
+INSERT INTO Profesor
+	VALUES (1, "Fran","Mendez", "Lopez","1998-09-01",1);
 
-CREATE VIEW a AS 
+CREATE VIEW vista1 AS 
 	SELECT Alumno.*,
 	Curso.*
 	FROM Alumno join Curso on Alumno.idCurso = Curso.id ;
-    
-Select * from a;
+
+CREATE VIEW vista2 AS 
+	SELECT Profesor.*,
+	Curso.*
+	FROM Profesor join Curso on Profesor.idCurso = Curso.id;
+

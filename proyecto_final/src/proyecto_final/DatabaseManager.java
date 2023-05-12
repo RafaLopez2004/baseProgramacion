@@ -45,10 +45,9 @@ public class DatabaseManager {
 		ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
 		try {
 			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimientoid,año,letraAño FROM vista1");
+					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimientoid,id,año,letraAño FROM vista1");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				// Instanciamos el curso necesario para satisfacer las necesidades del constructor
 				alumnos.add(this.instanciarAlumno(rs));
 			}
 		} catch (SQLException e) {			
@@ -61,7 +60,7 @@ public class DatabaseManager {
 		ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
 		try {
 			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimientoid,año,letraAño "
+					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimientoid,id,año,letraAño "
 							+ "FROM vista1  "
 							+ "WHERE año=?");
 			ps.setInt(1,curso);
@@ -79,7 +78,7 @@ public class DatabaseManager {
 		ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
 		try {
 			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimientoid,año,letraAño "
+					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 ,id, fechaNacimientoid,año,letraAño "
 							+ "FROM vista1  "
 							+ "WHERE letraAño=?");
 			ps.setString(1,letraAño);
@@ -141,7 +140,7 @@ public class DatabaseManager {
 		}
 		return cursos;
 	}
-	
+
 	public ArrayList<Curso> getCursos(String letraAño){
 		ArrayList<Curso> cursos = new ArrayList<Curso>();
 		try {
@@ -157,7 +156,7 @@ public class DatabaseManager {
 		}
 		return cursos;
 	}
-	
+
 	public ArrayList<Curso> getCursos(int año, String letraAño){
 		ArrayList<Curso> cursos = new ArrayList<Curso>();
 		try {
@@ -175,6 +174,58 @@ public class DatabaseManager {
 		}
 		return cursos;
 	}
+	public ArrayList<Profesor> getProfesores(){
+		ArrayList<Profesor> profesores = new ArrayList<Profesor>();
+		try {
+			PreparedStatement ps = this.connection.
+					prepareStatement("SELECT idProfesor,nombre,apellido1, apellido2 , fechaNacimiento,id,año,letraAño FROM vista2 ");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				profesores.add(this.instanciarProfesor(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return profesores;
+	}
+	public ArrayList<Profesor> getProfesores(String letraAño){
+		ArrayList<Profesor> profesores = new ArrayList<Profesor>();
+		try {
+			PreparedStatement ps = this.connection.
+					prepareStatement("SELECT idProfesor,nombre,apellido1, apellido2 , fechaNacimiento,id,año,letraAño "
+							+ "FROM vista2  "
+							+ "WHERE letraAño=?");
+			ps.setString(1,letraAño);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				profesores.add(this.instanciarProfesor(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return profesores;
+	}
+	
+	public ArrayList<Profesor> getProfesores(Curso curso){
+		ArrayList<Profesor> profesores = new ArrayList<Profesor>();
+		try {
+			PreparedStatement ps = this.connection.
+					prepareStatement("SELECT idProfesor,nombre,apellido1, apellido2 , fechaNacimiento,id,año,letraAño "
+							+ "FROM vista2  "
+							+ "WHERE letraAño=? "
+							+ "WHERE año=?");
+			ps.setString(1,curso.getLetraAño());
+			ps.setInt(2, curso.getAño());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				profesores.add(this.instanciarProfesor(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return profesores;
+	}
+	
 	/**
 	 * Metodos helper que realizan ciertas acciones que se repiten varias veces a lo largo del codigo
 	 */
@@ -201,12 +252,17 @@ public class DatabaseManager {
 	private Curso instanciarCurso(ResultSet rs) {
 		Curso curso = null;
 		try {
-			//if () {
-			curso = new Curso(
-					rs.getInt(6),
-					rs.getInt(7),
-					rs.getString(8));
-			//}
+			if (rs.getFetchSize() > 3) {
+				curso = new Curso(
+						rs.getInt(rs.getFetchSize()-2),
+						rs.getInt(rs.getFetchSize()-1),
+						rs.getString(rs.getFetchSize()));
+			} else {
+				curso = new Curso(
+						rs.getInt(1),
+						rs.getInt(2),
+						rs.getString(3));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
@@ -226,5 +282,25 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 		return cursos;
+	}
+	private Profesor instanciarProfesor(ResultSet rs) {
+		Profesor profesor = null;
+		Curso curso = this.instanciarCurso(rs);	
+		profesor = this.instanciarProfesor(rs, curso);
+		return profesor;
+	}
+	private Profesor instanciarProfesor(ResultSet rs, Curso curso) {
+		Profesor profesor = null;
+		try {
+			profesor = new Profesor(rs.getInt(1),
+					rs.getString(2),
+					rs.getString(3),
+					rs.getString(4),
+					rs.getDate(5), 
+					curso);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return profesor;
 	}
 }
