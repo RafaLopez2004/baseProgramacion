@@ -2,6 +2,7 @@ package proyecto_final;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ import java.util.TreeSet;
 import org.eclipse.jdt.annotation.NonNull;
 
 public class DatabaseManager {
-	private Connection connection=null;
+	private DatabaseConnection databaseConnection=null;
 	private Statement statement=null;
 
 	/**
@@ -24,15 +25,8 @@ public class DatabaseManager {
 	 * que no puede ser nulo
 	 * @param connection Objeto de conexión
 	 */
-	public DatabaseManager(@NonNull Connection connection) {
-		if(this.connection != null)
-			return;
-		this.connection = connection;
-		try {
-			this.statement = connection.createStatement();
-		} catch (SQLException e) {			
-			e.printStackTrace();
-		}
+	public DatabaseManager(@NonNull DatabaseConnection connection) {
+		this.databaseConnection = connection;
 	}
 
 	/**
@@ -43,26 +37,32 @@ public class DatabaseManager {
 	 */
 	public ArrayList<Alumno> getAlumnos(){
 		ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
+		Connection connection = null;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimientoid,id,año,letraAño FROM vista1");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				alumnos.add(this.instanciarAlumno(rs));
-			}
+			} 
 		} catch (SQLException e) {			
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return alumnos;
 	}
 
 	public ArrayList<Alumno> getAlumnos(int curso){
 		ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
+		String sqlQuery = "SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimientoid,id,año,letraAño "
+				+ "FROM vista1  "
+				+ "WHERE año=?";
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimientoid,id,año,letraAño "
-							+ "FROM vista1  "
-							+ "WHERE año=?");
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 			ps.setInt(1,curso);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
@@ -76,8 +76,10 @@ public class DatabaseManager {
 
 	public ArrayList<Alumno> getAlumnos(String letraAño){
 		ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 ,id, fechaNacimientoid,año,letraAño "
 							+ "FROM vista1  "
 							+ "WHERE letraAño=?");
@@ -88,14 +90,18 @@ public class DatabaseManager {
 			}
 		} catch (SQLException e) {			
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return alumnos;
 	}
 
 	public ArrayList<Alumno> getAlumnos(Curso curso){
 		ArrayList<Alumno> alumnos = new ArrayList<Alumno>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT numMatricula,nombre,apellido1, apellido2 , fechaNacimiento "
 							+ "FROM vista1  "
 							+ "WHERE año=? "
@@ -108,27 +114,38 @@ public class DatabaseManager {
 			}
 		} catch (SQLException e) {			
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return alumnos;
 	}
-
+/**
+ * 
+ * @return
+ */
 	public ArrayList<Curso> getCursos(){
 		ArrayList<Curso> cursos = new ArrayList<Curso>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
-					prepareStatement("SELECT id,año,letraAñO FROM Curso");
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
+					prepareStatement("SELECT id,año,letraAño FROM Curso");
 			ResultSet rs = ps.executeQuery();
 			cursos = this.instanciarCursos(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return cursos;
 	}
 
 	public ArrayList<Curso> getCursos(int año){
 		ArrayList<Curso> cursos = new ArrayList<Curso>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT id,año,letraAño "
 							+ "FROM Curso "
 							+ "WHERE año =?");
@@ -137,14 +154,18 @@ public class DatabaseManager {
 			cursos = this.instanciarCursos(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return cursos;
 	}
 
 	public ArrayList<Curso> getCursos(String letraAño){
 		ArrayList<Curso> cursos = new ArrayList<Curso>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT id,año,letraAño "
 							+ "FROM Curso "
 							+ "WHERE letraAño =?");
@@ -153,14 +174,18 @@ public class DatabaseManager {
 			cursos = this.instanciarCursos(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return cursos;
 	}
 
 	public ArrayList<Curso> getCursos(int año, String letraAño){
 		ArrayList<Curso> cursos = new ArrayList<Curso>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT id,año,letraAño "
 							+ "FROM Curso "
 							+ "WHERE letraAño =? "
@@ -171,13 +196,17 @@ public class DatabaseManager {
 			cursos = this.instanciarCursos(rs);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return cursos;
 	}
 	public ArrayList<Profesor> getProfesores(){
 		ArrayList<Profesor> profesores = new ArrayList<Profesor>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT idProfesor,nombre,apellido1, apellido2 , fechaNacimiento,id,año,letraAño FROM vista2 ");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
@@ -190,8 +219,10 @@ public class DatabaseManager {
 	}
 	public ArrayList<Profesor> getProfesores(String letraAño){
 		ArrayList<Profesor> profesores = new ArrayList<Profesor>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT idProfesor,nombre,apellido1, apellido2 , fechaNacimiento,id,año,letraAño "
 							+ "FROM vista2  "
 							+ "WHERE letraAño=?");
@@ -202,14 +233,18 @@ public class DatabaseManager {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return profesores;
 	}
 	
 	public ArrayList<Profesor> getProfesores(Curso curso){
 		ArrayList<Profesor> profesores = new ArrayList<Profesor>();
+		Connection connection;
 		try {
-			PreparedStatement ps = this.connection.
+			connection = DriverManager.getConnection(this.databaseConnection.getConnectionString());
+			PreparedStatement ps = connection.
 					prepareStatement("SELECT idProfesor,nombre,apellido1, apellido2 , fechaNacimiento,id,año,letraAño "
 							+ "FROM vista2  "
 							+ "WHERE letraAño=? "
@@ -222,9 +257,12 @@ public class DatabaseManager {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			this.databaseConnection.disconnect();
 		}
 		return profesores;
 	}
+	
 	
 	/**
 	 * Metodos helper que realizan ciertas acciones que se repiten varias veces a lo largo del codigo
@@ -277,6 +315,8 @@ public class DatabaseManager {
 			for(Curso curso:cursos) {
 				ArrayList<Alumno> alumnos = this.getAlumnos(curso);
 				curso.setAlumnos(alumnos);
+				ArrayList<Profesor> profesores = this.getProfesores(curso);
+				curso.setProfesores(profesores);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
