@@ -64,4 +64,27 @@ public class Curso {
 	public void addAlumno(Alumno alumno) {
 		this.alumnos.add(alumno);
 	}
+
+	@Override
+	public String toString() {
+		String profesorString = "";
+		String alumnoString = "";
+		for (Alumno alumno:
+				this.alumnos) {
+			alumnoString += alumno.getNombre() + " " + alumno.getApellido1() + " " + alumno.getApellido2() + ",";
+		}
+		for (Profesor profesor:
+				this.profesores){
+			profesorString += profesor.getNombre() + " " + profesor.getApellido1() + " " + profesor.getApellido2() + ",";
+		}
+
+		return "Curso{" +
+				"id=" + id +
+				", año=" + año +
+				", letraAño='" + letraAño + '\'' +
+				", profesores=" + profesorString +
+				" alumnos=" + alumnoString +
+				'}';
+	}
 }
+

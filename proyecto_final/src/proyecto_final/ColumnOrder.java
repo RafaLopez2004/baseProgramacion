@@ -1,16 +1,16 @@
 package proyecto_final;
 
 public class ColumnOrder {
-	private int index;
+	private String index;
 	private String order;
-	public ColumnOrder(int index, String order) {
+	public ColumnOrder(String index, String order) {
 		this.index = index;
 		this.order = order;
 	}
-	public int getIndex() {
+	public String getIndex() {
 		return index;
 	}
-	public void setIndex(int index) {
+	public void setIndex(String index) {
 		this.index = index;
 	}
 	public String getOrder() {

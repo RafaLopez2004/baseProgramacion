@@ -1,16 +1,17 @@
 package proyecto_final;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.eclipse.jdt.annotation.NonNull;
 
 public class DatabaseConnection {
 	private Connection connection;
 	private String connectionString;
 	
-	public DatabaseConnection(@NonNull String connectionString) {		
+	public DatabaseConnection(@NotNull String connectionString) {
 		//guarda los datos de conexión
 		this.connectionString = connectionString;
 		try {

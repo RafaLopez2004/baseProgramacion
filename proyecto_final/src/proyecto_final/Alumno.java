@@ -76,4 +76,16 @@ public class Alumno {
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
+
+	@Override
+	public String toString() {
+		return "Alumno{" +
+				"numMatricula=" + numMatricula +
+				", nombre='" + nombre + '\'' +
+				", apellido1='" + apellido1 + '\'' +
+				", apellido2='" + apellido2 + '\'' +
+				", curso=" + curso.getAño() + curso.getLetraAño() +
+				", fechaNacimiento=" + fechaNacimiento +
+				'}';
+	}
 }
