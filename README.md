@@ -4,15 +4,15 @@
 
 Libreria que provee las clases y metodos para la sencilla gestion de la BD instituto, para ello usamos principalmente 3 clases:
 
--DatabaseConnection: Crear, mantiene y cierra la conexión con la base de datos, debemos pasarle un string en su constructor que corresponde con la conexión y sus credenciales, la conexion debe apuntar a una BD existente, lo cual debera poseer un formato similar a este:
+- DatabaseConnection: Crear, mantiene y cierra la conexión con la base de datos, debemos pasarle un string en su constructor que corresponde con la conexión y sus credenciales, la conexion debe apuntar a una BD existente, lo cual debera poseer un formato similar a este:
 ```
 new DatabaseConection(jdbc:mysql://localhost/instituto?user=USUARIOBD&password=CONTRASEÑABD");
 ```
 En caso de que su usuario no tenga contraseña no ponga nada despues del =.
 
--SchemaManager: Nos permite crear una BD que cumple con las asunciones de los metodos que la gestionan, ademas de poder introducir datos de ejemplo para el testeo 
+- SchemaManager: Nos permite crear una BD que cumple con las asunciones de los metodos que la gestionan, ademas de poder introducir datos de ejemplo para el testeo 
 
--DatabaseManager:Posee todos los metodos que gestionan la base de datos
+- DatabaseManager:Posee todos los metodos que gestionan la base de datos
 
 ## Funcionalidades
 Esta libreria permite:
@@ -30,7 +30,7 @@ Esta libreria permite:
 # Dependencias
 - mysql-connector, esta es la libreria que permite la conexión con nuestra base de datos
 
--org.eclipse.jdt.annotation, usaremos la anotacion nonNull para evitar que se nos pasen referencias nulas
+- org.eclipse.jdt.annotation, usaremos la anotacion nonNull para evitar que se nos pasen referencias nulas
 
 # Especificaciones de uso
 
