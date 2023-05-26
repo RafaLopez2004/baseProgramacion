@@ -4,7 +4,7 @@
 
 Libreria que provee las clases y metodos para la sencilla gestion de la BD instituto, para ello usamos principalmente 3 clases:
 
--DatabaseConnection: Crear, mantiene y cierra la conexión con la base de datos, debemos pasarle un string en su constructor que corresponde con la conexión y sus credenciales, lo cual debera poseer un formato similar a este:
+-DatabaseConnection: Crear, mantiene y cierra la conexión con la base de datos, debemos pasarle un string en su constructor que corresponde con la conexión y sus credenciales, la conexion debe apuntar a una BD existente, lo cual debera poseer un formato similar a este:
 ```
 new DatabaseConection(jdbc:mysql://localhost/instituto?user=USUARIOBD&password=CONTRASEÑABD");
 ```
